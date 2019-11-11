@@ -30,7 +30,8 @@ export default {
     }),
 
     ...mapGetters("products", {
-      productIsInStock: "productIsInStock"
+      productIsInStock: "productIsInStock",
+      productByID: "productByID"
     })
   },
 

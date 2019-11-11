@@ -14,6 +14,11 @@ export default {
 
     productIsInStock() {
       return product => product.inventory > 0
+    },
+
+    productByID(state, getters, rootState) {
+      return cartItem =>
+        rootState.products.items.find(({ id }) => id === cartItem.id)
     }
   },
 
@@ -22,13 +27,13 @@ export default {
       state.items = products
     },
 
-    resetProductInventory(state, productInCart) {
-      const product = state.items.find(item => item.id === productInCart.id)
+    // resetProductInventory(state, productInCart) {
+    //   const product = state.items.find(item => item.id === productInCart.id)
 
-      console.log(productInCart)
+    //   console.log(productInCart)
 
-      product.inventory = product.inventory + productInCart.quantity
-    },
+    //   product.inventory = product.inventory + productInCart.quantity
+    // },
 
     decrementProductInventory(state, product) {
       product.inventory--

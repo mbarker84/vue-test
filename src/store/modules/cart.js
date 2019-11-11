@@ -33,6 +33,10 @@ export default {
       })
 
       return total
+    },
+
+    cartItemByID(state, rootState) {
+      return product => rootState.cart.items.find(({ id }) => id === product.id)
     }
   },
 
@@ -87,10 +91,9 @@ export default {
       commit('products/decrementProductInventory', product, { root: true })
     },
 
-    removeProductFromCart({ commit }, product) {
-      commit('products/resetProductInventory', product, { root: true })
-      commit('removeProduct', product.id)
-    },
+    // removeProductFromCart({ commit }, product) {
+    //   commit('removeProduct', product.id)
+    // },
 
     checkout({ state, commit }) {
       shop.buyProducts(
@@ -105,26 +108,32 @@ export default {
       )
     },
 
-    increaseBasketQuantity({ dispatch, rootState }, cartItem) {
-      const product = rootState.products.items.find(
-        ({ id }) => id === cartItem.id
-      )
+    increaseBasketQuantity({ dispatch, rootState, rootGetters }, cartItem) {
+      // const product = rootState.products.items.find(
+      //   ({ id }) => id === cartItem.id
+      // )
+
+      const product = rootGetters['products/productByID'](cartItem)
 
       return dispatch('addProductToCart', product)
     },
 
-    decreaseBasketQuantity({ commit, rootState, dispatch }, cartItem) {
-      const product = rootState.products.items.find(
-        ({ id }) => id === cartItem.id
-      )
+    decreaseBasketQuantity(
+      { commit, getters, rootState, dispatch, rootGetters },
+      cartItem
+    ) {
+      const product = rootGetters['products/productByID'](cartItem)
 
       if (cartItem.quantity === 1) {
-        dispatch('removeProductFromCart', product)
-      }
-
-      if (product.inventory > 1) {
+        commit('removeProduct', product.id)
+      } else {
         commit('decrementItemQuantity', cartItem)
       }
+
+      // if (product.inventory > 1) {
+      //   console.log('PRODUCT IS > 1')
+      //   commit('decrementItemQuantity', cartItem)
+      // }
 
       commit('products/incrementProductInventory', product, { root: true })
     }
