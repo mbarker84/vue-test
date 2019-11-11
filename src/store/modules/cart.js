@@ -97,9 +97,21 @@ export default {
       )
     },
 
-    increaseBasketQuantity({ state, commit }, basketProduct) {
-      console.log(basketProduct)
-      commit('incrementItemQuantity', basketProduct)
+    increaseBasketQuantity(
+      { state, commit, rootState, rootGetters },
+      cartItem
+    ) {
+      const product = rootState.products.items.find(
+        ({ id }) => id === cartItem.id
+      )
+
+      if (product.inventory > 0) {
+        commit('incrementItemQuantity', cartItem)
+        commit('products/decrementProductInventory', product, { root: true })
+      } else {
+        console.log(basketProduct)
+      }
+
       // commit('products/decrementProductInventory', product)
     }
   }
