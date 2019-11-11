@@ -6,6 +6,7 @@
         {{ product.title }} – {{ product.price | currency }} – {{ product.quantity }}
         <button
           @click="increaseBasketQuantity(product)"
+          :disabled="!productIsInStock(product)"
         >+</button>
         <button @click="decreaseBasketQuantity(product)">-</button>
         <button @click="removeProductFromCart(product)">Remove</button>
@@ -24,11 +25,11 @@ export default {
   computed: {
     ...mapGetters("cart", {
       cartProducts: "cartProducts",
-      total: "cartTotal"
+      total: "cartTotal",
+      productIsInStock: "productIsInStock"
     }),
 
     ...mapGetters("products", {
-      productIsInStock: "productIsInStock",
       productByID: "productByID"
     }),
 

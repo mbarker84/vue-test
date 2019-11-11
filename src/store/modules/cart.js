@@ -37,6 +37,13 @@ export default {
 
     cartItemByID(state, rootState) {
       return product => rootState.cart.items.find(({ id }) => id === product.id)
+    },
+
+    productIsInStock(state, getters, rootState, rootGetters) {
+      return cartItem => {
+        const product = rootGetters['products/productByID'](cartItem)
+        return rootGetters['products/productIsInStock'](product)
+      }
     }
   },
 

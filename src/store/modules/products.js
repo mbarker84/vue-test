@@ -27,14 +27,6 @@ export default {
       state.items = products
     },
 
-    // resetProductInventory(state, productInCart) {
-    //   const product = state.items.find(item => item.id === productInCart.id)
-
-    //   console.log(productInCart)
-
-    //   product.inventory = product.inventory + productInCart.quantity
-    // },
-
     decrementProductInventory(state, product) {
       product.inventory--
     },
