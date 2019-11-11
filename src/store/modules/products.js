@@ -15,10 +15,6 @@ export default {
     productIsInStock() {
       return product => product.inventory > 0
     }
-
-    // indexOfProduct(state) {
-    //   return product => state.items.findIndex(({ id }) => id === product.id)
-    // }
   },
 
   mutations: {
@@ -27,12 +23,11 @@ export default {
     },
 
     resetProductInventory(state, productInCart) {
-      const indexOfProduct = state.items.findIndex(
-        ({ id }) => id === productInCart.id
-      )
+      const product = state.items.find(item => item.id === productInCart.id)
 
-      state.items[indexOfProduct].inventory =
-        state.items[indexOfProduct].inventory + productInCart.quantity
+      console.log(productInCart)
+
+      product.inventory = product.inventory + productInCart.quantity
     },
 
     decrementProductInventory(state, product) {

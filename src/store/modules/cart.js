@@ -48,6 +48,14 @@ export default {
       cartItem.quantity++
     },
 
+    decrementItemQuantity(state, cartItem) {
+      const itemInCart = state.items.find(item => item.id === cartItem.id)
+
+      if (!itemInCart) return
+
+      itemInCart.quantity--
+    },
+
     setCheckoutStatus(state, status) {
       state.checkoutStatus = status
     },
@@ -80,8 +88,8 @@ export default {
     },
 
     removeProductFromCart({ commit }, product) {
-      commit('removeProduct', product.id)
       commit('products/resetProductInventory', product, { root: true })
+      commit('removeProduct', product.id)
     },
 
     checkout({ state, commit }) {
@@ -97,22 +105,28 @@ export default {
       )
     },
 
-    increaseBasketQuantity(
-      { state, commit, rootState, rootGetters },
-      cartItem
-    ) {
+    increaseBasketQuantity({ dispatch, rootState }, cartItem) {
       const product = rootState.products.items.find(
         ({ id }) => id === cartItem.id
       )
 
-      if (product.inventory > 0) {
-        commit('incrementItemQuantity', cartItem)
-        commit('products/decrementProductInventory', product, { root: true })
-      } else {
-        console.log(basketProduct)
+      return dispatch('addProductToCart', product)
+    },
+
+    decreaseBasketQuantity({ commit, rootState, dispatch }, cartItem) {
+      const product = rootState.products.items.find(
+        ({ id }) => id === cartItem.id
+      )
+
+      if (cartItem.quantity === 1) {
+        dispatch('removeProductFromCart', product)
       }
 
-      // commit('products/decrementProductInventory', product)
+      if (product.inventory > 1) {
+        commit('decrementItemQuantity', cartItem)
+      }
+
+      commit('products/incrementProductInventory', product, { root: true })
     }
   }
 }
